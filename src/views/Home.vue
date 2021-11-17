@@ -11,7 +11,7 @@
 				</a-button>
 			</a-form-item>
 			<a-form-item
-				:label="`All your NFTs(${nfts.length}).`"
+				:label="`Your NFTs(${nfts.length}).`"
 				style="width: 100%"
 			>
 				<div class="nft-display">
