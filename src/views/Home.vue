@@ -46,7 +46,8 @@ export default class Home extends Vue {
 		width: 440,
 		height: 400,
 	}
-	async mounted() {
+
+	async created() {
 		await this.getMyNFTs()
 	}
 
@@ -57,9 +58,8 @@ export default class Home extends Vue {
 			const from = await signer.getAddress()
 			const data = arcade.interface.encodeFunctionData('mint')
 			const tx = await signer.sendTransaction({ from, to: arcadeAddress, data })
-			const receipts = await tx.wait()
-			console.log(receipts)
-			await this.getMyNFTs()
+			await tx.wait()
+			this.getMyNFTs()
 		} catch (e) {
 			this.popError(e)
 		} finally {
@@ -70,21 +70,30 @@ export default class Home extends Vue {
 	async getMyNFTs() {
 		const from = await provider.getSigner().getAddress()
 		const total = await arcade.balanceOf(from)
+		const promises: Promise<any>[] = []
 		for (let i = 0; i < total.toNumber(); i++) {
-			const tokenId = await arcade.tokenOfOwnerByIndex(from, i)
-			const metaId = await arcade.metaIds(tokenId)
-			const owner = await arcade.ownerOf(tokenId)
-			const filters = this.nfts.filter((v) => {
-				return v.metaId.toString() == metaId.toString()
-			})
-			if (filters.length == 0) {
-				this.nfts.push({
-					owner,
-					tokenId,
-					metaId,
-				})
-			}
+			promises.push(this.getNFT(from, i))
 		}
+		await Promise.all(promises)
+	}
+
+	async getNFT(from: string, i: number) {
+		const ps: Promise<any>[] = []
+		const tokenId = await arcade.tokenOfOwnerByIndex(from, i)
+		const filters = this.nfts.filter((v) => {
+			return v.tokenId.toString() == tokenId.toString()
+		})
+		if (filters.length != 0) {
+			return
+		}
+		ps.push(arcade.metaIds(tokenId))
+		ps.push(arcade.ownerOf(tokenId))
+		const [metaId, owner] = await Promise.all(ps)
+		this.nfts.push({
+			owner,
+			tokenId,
+			metaId,
+		})
 	}
 }
 </script>

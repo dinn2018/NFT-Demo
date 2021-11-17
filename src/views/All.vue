@@ -18,8 +18,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from 'vue-property-decorator'
 import { arcade } from '@/factories'
+import { Route } from 'vue-router'
 import NFT from '@/components/NFT.vue'
 
 @Component({
@@ -35,23 +36,44 @@ export default class All extends Vue {
 		width: 440,
 		height: 400,
 	}
-	async mounted() {
-		const total = await arcade.totalSupply()
-		for (let i = 0; i < total.toNumber(); i++) {
-			const tokenId = await arcade.tokenByIndex(i)
-			const metaId = await arcade.metaIds(tokenId)
-			const owner = await arcade.ownerOf(tokenId)
-			const filters = this.nfts.filter((v) => {
-				return v.metaId.toString() == metaId.toString()
-			})
-			if (filters.length == 0) {
-				this.nfts.push({
-					owner,
-					tokenId,
-					metaId,
-				})
-			}
+
+	@Watch('$route')
+	onRouteChanged(newRoute: Route, oldRoute: Route) {
+		if (newRoute.name == 'all') {
+			this.getAllNFTs()
 		}
+	}
+
+	async created() {
+		await this.getAllNFTs()
+	}
+
+	async getAllNFTs() {
+		const total = await arcade.totalSupply()
+		const promises: Promise<any>[] = []
+		for (let i = 0; i < total.toNumber(); i++) {
+			promises.push(this.getNFT(i))
+		}
+		await Promise.all(promises)
+	}
+
+	async getNFT(i: number) {
+		const ps: Promise<any>[] = []
+		const tokenId = await arcade.tokenByIndex(i)
+		const filters = this.nfts.filter((v) => {
+			return v.tokenId.toString() == tokenId.toString()
+		})
+		if (filters.length != 0) {
+			return
+		}
+		ps.push(arcade.metaIds(tokenId))
+		ps.push(arcade.ownerOf(tokenId))
+		const [metaId, owner] = await Promise.all(ps)
+		this.nfts.push({
+			owner,
+			tokenId,
+			metaId,
+		})
 	}
 }
 </script>

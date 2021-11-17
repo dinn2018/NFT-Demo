@@ -71,6 +71,10 @@ export default class NTF extends Vue {
 		const ctx = this.canvas.getContext('2d')!
 		// ctx.fillStyle = '#FF0000'
 		// ctx.fillRect(0, 0, width, height)
+		// var grd = ctx.createLinearGradient(0,0,200,0);
+		// grd.addColorStop(0,"red");
+		// grd.addColorStop(1,"white");
+
 		// base
 		await this.drawImage(ctx, `/0/${level}`, 0, 0, width, height)
 		// armor

@@ -40,7 +40,9 @@
 				</a-menu-item>
 			</a-menu>
 		</div>
-		<router-view style="margin-left: 8px" />
+		<keep-alive>
+			<router-view style="margin-left: 8px" />
+		</keep-alive>
 	</div>
 </template>
 <script lang="ts">
