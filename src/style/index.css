@@ -1,0 +1,10 @@
+.m-l-min {
+	margin-left: 8px;
+}
+
+.nft-display {
+	display: flex;
+	justify-content: flex-start;
+	align-items: baseline;
+	flex-wrap: wrap;
+}
