@@ -17,6 +17,11 @@ declare global {
 			metaId: BigNumber
 			owner: string
 		}
+
+		interface ImageSize {
+			width: number
+			height: number
+		}
 	}
 
 

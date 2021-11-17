@@ -8,6 +8,7 @@
 						:key="`all-${i}`"
 						id-prefix="all"
 						:token="token"
+						:size="nftSize"
 						style="margin-left: 16px"
 					/>
 				</div>
@@ -30,7 +31,10 @@ export default class All extends Vue {
 	loading = false
 	hasNFT = false
 	nfts: Entity.NFT[] = []
-
+	nftSize: Entity.ImageSize = {
+		width: 440,
+		height: 400,
+	}
 	async mounted() {
 		const total = await arcade.totalSupply()
 		for (let i = 0; i < total.toNumber(); i++) {

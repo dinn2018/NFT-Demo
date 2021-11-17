@@ -6,6 +6,12 @@
 			token id:{{ tokenId }}<br>
 			meta id:{{ metaId }}
 		</p>
+		<a-button
+			type="primary"
+			@click="download"
+		>
+			Download
+		</a-button>
 	</div>
 </template>
 
@@ -17,6 +23,9 @@ import axios from 'axios'
 @Component
 export default class NTF extends Vue {
 	canvas!: HTMLCanvasElement
+
+	@Prop()
+	size!: Entity.ImageSize
 
 	@Prop()
 	idPrefix!: string
@@ -50,17 +59,18 @@ export default class NTF extends Vue {
 	}
 
 	async drawNFT() {
-		console.log('drawNFT')
 		const level = this.attributes(0)
 		const armor = this.attributes(1)
 		const gem = this.attributes(2)
 		const earmuff = this.attributes(3)
 		const mask = this.attributes(4)
 		const glass = this.attributes(5)
-		const width = 220
-		const height = 200
+		const width = this.size.width
+		const height = this.size.height
 		this.getCanvas(width, height)
 		const ctx = this.canvas.getContext('2d')!
+		// ctx.fillStyle = '#FF0000'
+		// ctx.fillRect(0, 0, width, height)
 		// base
 		await this.drawImage(ctx, `/0/${level}`, 0, 0, width, height)
 		// armor
@@ -108,6 +118,11 @@ export default class NTF extends Vue {
 			0.453 * width,
 			0.2 * height
 		)
+
+		// const link = document.createElement('a')
+		// link.download = this.token.tokenId.toString()
+		// link.href = this.canvas.toDataURL()
+		// link.click()
 	}
 
 	attributes(tag: number): number {
@@ -149,7 +164,7 @@ export default class NTF extends Vue {
 
 	async download() {
 		const link = document.createElement('a')
-		link.download = 'filename.png'
+		link.download = this.token.tokenId.toString()
 		link.href = this.canvas.toDataURL()
 		link.click()
 	}

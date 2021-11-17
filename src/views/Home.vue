@@ -20,6 +20,7 @@
 						:key="`my-${i}`"
 						id-prefix="my"
 						:token="token"
+						:size="nftSize"
 						style="margin-left: 16px"
 					/>
 				</div>
@@ -41,7 +42,10 @@ import NFT from '@/components/NFT.vue'
 export default class Home extends Vue {
 	loading = false
 	nfts: Entity.NFT[] = []
-
+	nftSize: Entity.ImageSize = {
+		width: 440,
+		height: 400,
+	}
 	async mounted() {
 		await this.getMyNFTs()
 	}
