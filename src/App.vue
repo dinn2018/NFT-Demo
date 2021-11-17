@@ -96,7 +96,7 @@ export default class App extends Vue {
 				'Please MetaMask change your network to `Ropsten`.'
 			)
 		}
-
+		await window.ethereum.request({ method: 'eth_requestAccounts' })
 		await this.checkState()
 	}
 
