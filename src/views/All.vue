@@ -38,7 +38,7 @@ export default class All extends Vue {
 	}
 
 	@Watch('$route')
-	onRouteChanged(newRoute: Route, oldRoute: Route) {
+	onRouteChanged(newRoute: Route) {
 		if (newRoute.name == 'all') {
 			this.getAllNFTs()
 		}
