@@ -44,7 +44,7 @@ export const formatNetwork = (chainId: number) => {
 }
 
 export const isNetworkSupported = (chainId: number) => {
-	return chainId == 0x3
+	return true//chainId == 0x3
 }
 
 

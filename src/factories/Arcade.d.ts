@@ -22,31 +22,39 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 interface ArcadeInterface extends ethers.utils.Interface {
 	functions: {
 		"approve(address,uint256)": FunctionFragment;
+		"armor(uint256)": FunctionFragment;
+		"armorURI(uint256)": FunctionFragment;
+		"attribute(uint256,uint8)": FunctionFragment;
 		"background(uint256)": FunctionFragment;
 		"backgroundURI(uint256)": FunctionFragment;
 		"balanceOf(address)": FunctionFragment;
 		"baseURI()": FunctionFragment;
-		"blockAttribute(uint256)": FunctionFragment;
-		"blockAttributeURI(uint256)": FunctionFragment;
-		"combatSuit(uint256)": FunctionFragment;
-		"combatSuitURI(uint256)": FunctionFragment;
+		"character(uint256)": FunctionFragment;
+		"characterSteps(uint256)": FunctionFragment;
+		"characterURI(uint256)": FunctionFragment;
+		"charactorURI()": FunctionFragment;
 		"componentsBaseURI()": FunctionFragment;
 		"customeURI(uint256)": FunctionFragment;
-		"facialAccessories(uint256)": FunctionFragment;
-		"facialAccessoriesURI(uint256)": FunctionFragment;
+		"earmuff(uint256)": FunctionFragment;
+		"earmuffURI(uint256)": FunctionFragment;
+		"gem(uint256)": FunctionFragment;
+		"gemURI(uint256)": FunctionFragment;
 		"generateMetaId(uint256)": FunctionFragment;
 		"getApproved(uint256)": FunctionFragment;
-		"glass(uint256)": FunctionFragment;
-		"glassURI(uint256)": FunctionFragment;
 		"hasPreset()": FunctionFragment;
+		"helmet(uint256)": FunctionFragment;
+		"helmetURI(uint256)": FunctionFragment;
 		"isApprovedForAll(address,address)": FunctionFragment;
 		"isSaleOpen()": FunctionFragment;
 		"level(uint256)": FunctionFragment;
+		"levelSteps(uint256)": FunctionFragment;
 		"levelURI(uint256)": FunctionFragment;
+		"mask(uint256)": FunctionFragment;
+		"maskURI(uint256)": FunctionFragment;
 		"maxMintx()": FunctionFragment;
 		"metaIdExsits(uint256)": FunctionFragment;
 		"metaIds(uint256)": FunctionFragment;
-		"mint()": FunctionFragment;
+		"mint(address)": FunctionFragment;
 		"name()": FunctionFragment;
 		"owner()": FunctionFragment;
 		"ownerOf(uint256)": FunctionFragment;
@@ -57,9 +65,8 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		"saleStart()": FunctionFragment;
 		"setApprovalForAll(address,bool)": FunctionFragment;
 		"setBaseURI(string)": FunctionFragment;
+		"setCharactorURI(string)": FunctionFragment;
 		"setComponentsBaseURI(string)": FunctionFragment;
-		"shape(uint256)": FunctionFragment;
-		"shapeURI(uint256)": FunctionFragment;
 		"supportsInterface(bytes4)": FunctionFragment;
 		"symbol()": FunctionFragment;
 		"tokenByIndex(uint256)": FunctionFragment;
@@ -77,6 +84,15 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		functionFragment: "approve",
 		values: [string, BigNumberish]
 	): string;
+	encodeFunctionData(functionFragment: "armor", values: [BigNumberish]): string;
+	encodeFunctionData(
+		functionFragment: "armorURI",
+		values: [BigNumberish]
+	): string;
+	encodeFunctionData(
+		functionFragment: "attribute",
+		values: [BigNumberish, BigNumberish]
+	): string;
 	encodeFunctionData(
 		functionFragment: "background",
 		values: [BigNumberish]
@@ -88,20 +104,20 @@ interface ArcadeInterface extends ethers.utils.Interface {
 	encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
 	encodeFunctionData(functionFragment: "baseURI", values?: undefined): string;
 	encodeFunctionData(
-		functionFragment: "blockAttribute",
+		functionFragment: "character",
 		values: [BigNumberish]
 	): string;
 	encodeFunctionData(
-		functionFragment: "blockAttributeURI",
+		functionFragment: "characterSteps",
 		values: [BigNumberish]
 	): string;
 	encodeFunctionData(
-		functionFragment: "combatSuit",
+		functionFragment: "characterURI",
 		values: [BigNumberish]
 	): string;
 	encodeFunctionData(
-		functionFragment: "combatSuitURI",
-		values: [BigNumberish]
+		functionFragment: "charactorURI",
+		values?: undefined
 	): string;
 	encodeFunctionData(
 		functionFragment: "componentsBaseURI",
@@ -112,11 +128,16 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		values: [BigNumberish]
 	): string;
 	encodeFunctionData(
-		functionFragment: "facialAccessories",
+		functionFragment: "earmuff",
 		values: [BigNumberish]
 	): string;
 	encodeFunctionData(
-		functionFragment: "facialAccessoriesURI",
+		functionFragment: "earmuffURI",
+		values: [BigNumberish]
+	): string;
+	encodeFunctionData(functionFragment: "gem", values: [BigNumberish]): string;
+	encodeFunctionData(
+		functionFragment: "gemURI",
 		values: [BigNumberish]
 	): string;
 	encodeFunctionData(
@@ -127,12 +148,15 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		functionFragment: "getApproved",
 		values: [BigNumberish]
 	): string;
-	encodeFunctionData(functionFragment: "glass", values: [BigNumberish]): string;
+	encodeFunctionData(functionFragment: "hasPreset", values?: undefined): string;
 	encodeFunctionData(
-		functionFragment: "glassURI",
+		functionFragment: "helmet",
 		values: [BigNumberish]
 	): string;
-	encodeFunctionData(functionFragment: "hasPreset", values?: undefined): string;
+	encodeFunctionData(
+		functionFragment: "helmetURI",
+		values: [BigNumberish]
+	): string;
 	encodeFunctionData(
 		functionFragment: "isApprovedForAll",
 		values: [string, string]
@@ -143,7 +167,16 @@ interface ArcadeInterface extends ethers.utils.Interface {
 	): string;
 	encodeFunctionData(functionFragment: "level", values: [BigNumberish]): string;
 	encodeFunctionData(
+		functionFragment: "levelSteps",
+		values: [BigNumberish]
+	): string;
+	encodeFunctionData(
 		functionFragment: "levelURI",
+		values: [BigNumberish]
+	): string;
+	encodeFunctionData(functionFragment: "mask", values: [BigNumberish]): string;
+	encodeFunctionData(
+		functionFragment: "maskURI",
 		values: [BigNumberish]
 	): string;
 	encodeFunctionData(functionFragment: "maxMintx", values?: undefined): string;
@@ -155,7 +188,7 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		functionFragment: "metaIds",
 		values: [BigNumberish]
 	): string;
-	encodeFunctionData(functionFragment: "mint", values?: undefined): string;
+	encodeFunctionData(functionFragment: "mint", values: [string]): string;
 	encodeFunctionData(functionFragment: "name", values?: undefined): string;
 	encodeFunctionData(functionFragment: "owner", values?: undefined): string;
 	encodeFunctionData(
@@ -182,13 +215,12 @@ interface ArcadeInterface extends ethers.utils.Interface {
 	): string;
 	encodeFunctionData(functionFragment: "setBaseURI", values: [string]): string;
 	encodeFunctionData(
-		functionFragment: "setComponentsBaseURI",
+		functionFragment: "setCharactorURI",
 		values: [string]
 	): string;
-	encodeFunctionData(functionFragment: "shape", values: [BigNumberish]): string;
 	encodeFunctionData(
-		functionFragment: "shapeURI",
-		values: [BigNumberish]
+		functionFragment: "setComponentsBaseURI",
+		values: [string]
 	): string;
 	encodeFunctionData(
 		functionFragment: "supportsInterface",
@@ -233,6 +265,9 @@ interface ArcadeInterface extends ethers.utils.Interface {
 	): string;
 
 	decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
+	decodeFunctionResult(functionFragment: "armor", data: BytesLike): Result;
+	decodeFunctionResult(functionFragment: "armorURI", data: BytesLike): Result;
+	decodeFunctionResult(functionFragment: "attribute", data: BytesLike): Result;
 	decodeFunctionResult(functionFragment: "background", data: BytesLike): Result;
 	decodeFunctionResult(
 		functionFragment: "backgroundURI",
@@ -240,17 +275,17 @@ interface ArcadeInterface extends ethers.utils.Interface {
 	): Result;
 	decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
 	decodeFunctionResult(functionFragment: "baseURI", data: BytesLike): Result;
+	decodeFunctionResult(functionFragment: "character", data: BytesLike): Result;
 	decodeFunctionResult(
-		functionFragment: "blockAttribute",
+		functionFragment: "characterSteps",
 		data: BytesLike
 	): Result;
 	decodeFunctionResult(
-		functionFragment: "blockAttributeURI",
+		functionFragment: "characterURI",
 		data: BytesLike
 	): Result;
-	decodeFunctionResult(functionFragment: "combatSuit", data: BytesLike): Result;
 	decodeFunctionResult(
-		functionFragment: "combatSuitURI",
+		functionFragment: "charactorURI",
 		data: BytesLike
 	): Result;
 	decodeFunctionResult(
@@ -258,14 +293,10 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		data: BytesLike
 	): Result;
 	decodeFunctionResult(functionFragment: "customeURI", data: BytesLike): Result;
-	decodeFunctionResult(
-		functionFragment: "facialAccessories",
-		data: BytesLike
-	): Result;
-	decodeFunctionResult(
-		functionFragment: "facialAccessoriesURI",
-		data: BytesLike
-	): Result;
+	decodeFunctionResult(functionFragment: "earmuff", data: BytesLike): Result;
+	decodeFunctionResult(functionFragment: "earmuffURI", data: BytesLike): Result;
+	decodeFunctionResult(functionFragment: "gem", data: BytesLike): Result;
+	decodeFunctionResult(functionFragment: "gemURI", data: BytesLike): Result;
 	decodeFunctionResult(
 		functionFragment: "generateMetaId",
 		data: BytesLike
@@ -274,16 +305,19 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		functionFragment: "getApproved",
 		data: BytesLike
 	): Result;
-	decodeFunctionResult(functionFragment: "glass", data: BytesLike): Result;
-	decodeFunctionResult(functionFragment: "glassURI", data: BytesLike): Result;
 	decodeFunctionResult(functionFragment: "hasPreset", data: BytesLike): Result;
+	decodeFunctionResult(functionFragment: "helmet", data: BytesLike): Result;
+	decodeFunctionResult(functionFragment: "helmetURI", data: BytesLike): Result;
 	decodeFunctionResult(
 		functionFragment: "isApprovedForAll",
 		data: BytesLike
 	): Result;
 	decodeFunctionResult(functionFragment: "isSaleOpen", data: BytesLike): Result;
 	decodeFunctionResult(functionFragment: "level", data: BytesLike): Result;
+	decodeFunctionResult(functionFragment: "levelSteps", data: BytesLike): Result;
 	decodeFunctionResult(functionFragment: "levelURI", data: BytesLike): Result;
+	decodeFunctionResult(functionFragment: "mask", data: BytesLike): Result;
+	decodeFunctionResult(functionFragment: "maskURI", data: BytesLike): Result;
 	decodeFunctionResult(functionFragment: "maxMintx", data: BytesLike): Result;
 	decodeFunctionResult(
 		functionFragment: "metaIdExsits",
@@ -311,11 +345,13 @@ interface ArcadeInterface extends ethers.utils.Interface {
 	): Result;
 	decodeFunctionResult(functionFragment: "setBaseURI", data: BytesLike): Result;
 	decodeFunctionResult(
+		functionFragment: "setCharactorURI",
+		data: BytesLike
+	): Result;
+	decodeFunctionResult(
 		functionFragment: "setComponentsBaseURI",
 		data: BytesLike
 	): Result;
-	decodeFunctionResult(functionFragment: "shape", data: BytesLike): Result;
-	decodeFunctionResult(functionFragment: "shapeURI", data: BytesLike): Result;
 	decodeFunctionResult(
 		functionFragment: "supportsInterface",
 		data: BytesLike
@@ -355,12 +391,14 @@ interface ArcadeInterface extends ethers.utils.Interface {
 	events: {
 		"Approval(address,address,uint256)": EventFragment;
 		"ApprovalForAll(address,address,bool)": EventFragment;
+		"MintMeta(uint256,address,uint256,uint256)": EventFragment;
 		"OwnershipTransferred(address,address)": EventFragment;
 		"Transfer(address,address,uint256)": EventFragment;
 	};
 
 	getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
 	getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
+	getEvent(nameOrSignatureOrTopic: "MintMeta"): EventFragment;
 	getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 	getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
@@ -378,6 +416,15 @@ export type ApprovalForAllEvent = TypedEvent<
 		owner: string;
 		operator: string;
 		approved: boolean;
+	}
+>;
+
+export type MintMetaEvent = TypedEvent<
+	[BigNumber, string, BigNumber, BigNumber] & {
+		tokenId: BigNumber;
+		to: string;
+		metaId: BigNumber;
+		nonce: BigNumber;
 	}
 >;
 
@@ -439,6 +486,22 @@ export class Arcade extends BaseContract {
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<ContractTransaction>;
 
+		armor(
+			tokenId: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<[BigNumber]>;
+
+		armorURI(
+			tokenId: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<[string]>;
+
+		attribute(
+			tokenId: BigNumberish,
+			attributeTag: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<[BigNumber]>;
+
 		background(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
@@ -453,25 +516,22 @@ export class Arcade extends BaseContract {
 
 		baseURI(overrides?: CallOverrides): Promise<[string]>;
 
-		blockAttribute(
+		character(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<[BigNumber]>;
 
-		blockAttributeURI(
+		characterSteps(
+			arg0: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<[number]>;
+
+		characterURI(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<[string]>;
 
-		combatSuit(
-			tokenId: BigNumberish,
-			overrides?: CallOverrides
-		): Promise<[BigNumber]>;
-
-		combatSuitURI(
-			tokenId: BigNumberish,
-			overrides?: CallOverrides
-		): Promise<[string]>;
+		charactorURI(overrides?: CallOverrides): Promise<[string]>;
 
 		componentsBaseURI(overrides?: CallOverrides): Promise<[string]>;
 
@@ -480,15 +540,19 @@ export class Arcade extends BaseContract {
 			overrides?: CallOverrides
 		): Promise<[string]>;
 
-		facialAccessories(
+		earmuff(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<[BigNumber]>;
 
-		facialAccessoriesURI(
+		earmuffURI(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<[string]>;
+
+		gem(tokenId: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
+
+		gemURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
 
 		generateMetaId(
 			randomId: BigNumberish,
@@ -500,17 +564,17 @@ export class Arcade extends BaseContract {
 			overrides?: CallOverrides
 		): Promise<[string]>;
 
-		glass(
+		hasPreset(overrides?: CallOverrides): Promise<[boolean]>;
+
+		helmet(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<[BigNumber]>;
 
-		glassURI(
+		helmetURI(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<[string]>;
-
-		hasPreset(overrides?: CallOverrides): Promise<[boolean]>;
 
 		isApprovedForAll(
 			owner: string,
@@ -525,7 +589,22 @@ export class Arcade extends BaseContract {
 			overrides?: CallOverrides
 		): Promise<[BigNumber]>;
 
+		levelSteps(
+			arg0: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<[number]>;
+
 		levelURI(
+			tokenId: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<[string]>;
+
+		mask(
+			tokenId: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<[BigNumber]>;
+
+		maskURI(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<[string]>;
@@ -543,6 +622,7 @@ export class Arcade extends BaseContract {
 		): Promise<[BigNumber]>;
 
 		mint(
+			to: string,
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<ContractTransaction>;
 
@@ -556,7 +636,7 @@ export class Arcade extends BaseContract {
 		): Promise<[string]>;
 
 		preset(
-			account: string,
+			to: string,
 			metaIds_: BigNumberish[],
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<ContractTransaction>;
@@ -595,20 +675,15 @@ export class Arcade extends BaseContract {
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<ContractTransaction>;
 
+		setCharactorURI(
+			_uri: string,
+			overrides?: Overrides & { from?: string | Promise<string> }
+		): Promise<ContractTransaction>;
+
 		setComponentsBaseURI(
 			uri_: string,
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<ContractTransaction>;
-
-		shape(
-			tokenId: BigNumberish,
-			overrides?: CallOverrides
-		): Promise<[BigNumber]>;
-
-		shapeURI(
-			tokenId: BigNumberish,
-			overrides?: CallOverrides
-		): Promise<[string]>;
 
 		supportsInterface(
 			interfaceId: BytesLike,
@@ -663,6 +738,16 @@ export class Arcade extends BaseContract {
 		overrides?: Overrides & { from?: string | Promise<string> }
 	): Promise<ContractTransaction>;
 
+	armor(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+	armorURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+	attribute(
+		tokenId: BigNumberish,
+		attributeTag: BigNumberish,
+		overrides?: CallOverrides
+	): Promise<BigNumber>;
+
 	background(
 		tokenId: BigNumberish,
 		overrides?: CallOverrides
@@ -677,39 +762,34 @@ export class Arcade extends BaseContract {
 
 	baseURI(overrides?: CallOverrides): Promise<string>;
 
-	blockAttribute(
+	character(
 		tokenId: BigNumberish,
 		overrides?: CallOverrides
 	): Promise<BigNumber>;
 
-	blockAttributeURI(
+	characterSteps(
+		arg0: BigNumberish,
+		overrides?: CallOverrides
+	): Promise<number>;
+
+	characterURI(
 		tokenId: BigNumberish,
 		overrides?: CallOverrides
 	): Promise<string>;
 
-	combatSuit(
-		tokenId: BigNumberish,
-		overrides?: CallOverrides
-	): Promise<BigNumber>;
-
-	combatSuitURI(
-		tokenId: BigNumberish,
-		overrides?: CallOverrides
-	): Promise<string>;
+	charactorURI(overrides?: CallOverrides): Promise<string>;
 
 	componentsBaseURI(overrides?: CallOverrides): Promise<string>;
 
 	customeURI(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-	facialAccessories(
-		tokenId: BigNumberish,
-		overrides?: CallOverrides
-	): Promise<BigNumber>;
+	earmuff(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-	facialAccessoriesURI(
-		tokenId: BigNumberish,
-		overrides?: CallOverrides
-	): Promise<string>;
+	earmuffURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+	gem(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+	gemURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
 	generateMetaId(
 		randomId: BigNumberish,
@@ -721,11 +801,11 @@ export class Arcade extends BaseContract {
 		overrides?: CallOverrides
 	): Promise<string>;
 
-	glass(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-	glassURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
 	hasPreset(overrides?: CallOverrides): Promise<boolean>;
+
+	helmet(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+	helmetURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
 	isApprovedForAll(
 		owner: string,
@@ -737,7 +817,13 @@ export class Arcade extends BaseContract {
 
 	level(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
+	levelSteps(arg0: BigNumberish, overrides?: CallOverrides): Promise<number>;
+
 	levelURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+	mask(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+	maskURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
 	maxMintx(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -746,6 +832,7 @@ export class Arcade extends BaseContract {
 	metaIds(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
 	mint(
+		to: string,
 		overrides?: Overrides & { from?: string | Promise<string> }
 	): Promise<ContractTransaction>;
 
@@ -756,7 +843,7 @@ export class Arcade extends BaseContract {
 	ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
 	preset(
-		account: string,
+		to: string,
 		metaIds_: BigNumberish[],
 		overrides?: Overrides & { from?: string | Promise<string> }
 	): Promise<ContractTransaction>;
@@ -795,14 +882,15 @@ export class Arcade extends BaseContract {
 		overrides?: Overrides & { from?: string | Promise<string> }
 	): Promise<ContractTransaction>;
 
+	setCharactorURI(
+		_uri: string,
+		overrides?: Overrides & { from?: string | Promise<string> }
+	): Promise<ContractTransaction>;
+
 	setComponentsBaseURI(
 		uri_: string,
 		overrides?: Overrides & { from?: string | Promise<string> }
 	): Promise<ContractTransaction>;
-
-	shape(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-	shapeURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
 	supportsInterface(
 		interfaceId: BytesLike,
@@ -854,6 +942,16 @@ export class Arcade extends BaseContract {
 			overrides?: CallOverrides
 		): Promise<void>;
 
+		armor(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+		armorURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+		attribute(
+			tokenId: BigNumberish,
+			attributeTag: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<BigNumber>;
+
 		background(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
@@ -868,39 +966,40 @@ export class Arcade extends BaseContract {
 
 		baseURI(overrides?: CallOverrides): Promise<string>;
 
-		blockAttribute(
+		character(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<BigNumber>;
 
-		blockAttributeURI(
+		characterSteps(
+			arg0: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<number>;
+
+		characterURI(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<string>;
 
-		combatSuit(
-			tokenId: BigNumberish,
-			overrides?: CallOverrides
-		): Promise<BigNumber>;
-
-		combatSuitURI(
-			tokenId: BigNumberish,
-			overrides?: CallOverrides
-		): Promise<string>;
+		charactorURI(overrides?: CallOverrides): Promise<string>;
 
 		componentsBaseURI(overrides?: CallOverrides): Promise<string>;
 
 		customeURI(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-		facialAccessories(
+		earmuff(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<BigNumber>;
 
-		facialAccessoriesURI(
+		earmuffURI(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<string>;
+
+		gem(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+		gemURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
 		generateMetaId(
 			randomId: BigNumberish,
@@ -912,11 +1011,17 @@ export class Arcade extends BaseContract {
 			overrides?: CallOverrides
 		): Promise<string>;
 
-		glass(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-		glassURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
 		hasPreset(overrides?: CallOverrides): Promise<boolean>;
+
+		helmet(
+			tokenId: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<BigNumber>;
+
+		helmetURI(
+			tokenId: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<string>;
 
 		isApprovedForAll(
 			owner: string,
@@ -928,7 +1033,13 @@ export class Arcade extends BaseContract {
 
 		level(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
+		levelSteps(arg0: BigNumberish, overrides?: CallOverrides): Promise<number>;
+
 		levelURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+		mask(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+		maskURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
 		maxMintx(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -939,7 +1050,7 @@ export class Arcade extends BaseContract {
 
 		metaIds(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
-		mint(overrides?: CallOverrides): Promise<void>;
+		mint(to: string, overrides?: CallOverrides): Promise<void>;
 
 		name(overrides?: CallOverrides): Promise<string>;
 
@@ -948,7 +1059,7 @@ export class Arcade extends BaseContract {
 		ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
 		preset(
-			account: string,
+			to: string,
 			metaIds_: BigNumberish[],
 			overrides?: CallOverrides
 		): Promise<void>;
@@ -982,14 +1093,12 @@ export class Arcade extends BaseContract {
 
 		setBaseURI(uri_: string, overrides?: CallOverrides): Promise<void>;
 
+		setCharactorURI(_uri: string, overrides?: CallOverrides): Promise<void>;
+
 		setComponentsBaseURI(
 			uri_: string,
 			overrides?: CallOverrides
 		): Promise<void>;
-
-		shape(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-		shapeURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
 		supportsInterface(
 			interfaceId: BytesLike,
@@ -1072,6 +1181,26 @@ export class Arcade extends BaseContract {
 			{ owner: string; operator: string; approved: boolean }
 		>;
 
+		"MintMeta(uint256,address,uint256,uint256)"(
+			tokenId?: BigNumberish | null,
+			to?: string | null,
+			metaId?: null,
+			nonce?: null
+		): TypedEventFilter<
+			[BigNumber, string, BigNumber, BigNumber],
+			{ tokenId: BigNumber; to: string; metaId: BigNumber; nonce: BigNumber }
+		>;
+
+		MintMeta(
+			tokenId?: BigNumberish | null,
+			to?: string | null,
+			metaId?: null,
+			nonce?: null
+		): TypedEventFilter<
+			[BigNumber, string, BigNumber, BigNumber],
+			{ tokenId: BigNumber; to: string; metaId: BigNumber; nonce: BigNumber }
+		>;
+
 		"OwnershipTransferred(address,address)"(
 			previousOwner?: string | null,
 			newOwner?: string | null
@@ -1114,6 +1243,19 @@ export class Arcade extends BaseContract {
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<BigNumber>;
 
+		armor(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+		armorURI(
+			tokenId: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<BigNumber>;
+
+		attribute(
+			tokenId: BigNumberish,
+			attributeTag: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<BigNumber>;
+
 		background(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
@@ -1128,25 +1270,22 @@ export class Arcade extends BaseContract {
 
 		baseURI(overrides?: CallOverrides): Promise<BigNumber>;
 
-		blockAttribute(
+		character(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<BigNumber>;
 
-		blockAttributeURI(
+		characterSteps(
+			arg0: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<BigNumber>;
+
+		characterURI(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<BigNumber>;
 
-		combatSuit(
-			tokenId: BigNumberish,
-			overrides?: CallOverrides
-		): Promise<BigNumber>;
-
-		combatSuitURI(
-			tokenId: BigNumberish,
-			overrides?: CallOverrides
-		): Promise<BigNumber>;
+		charactorURI(overrides?: CallOverrides): Promise<BigNumber>;
 
 		componentsBaseURI(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1155,12 +1294,19 @@ export class Arcade extends BaseContract {
 			overrides?: CallOverrides
 		): Promise<BigNumber>;
 
-		facialAccessories(
+		earmuff(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<BigNumber>;
 
-		facialAccessoriesURI(
+		earmuffURI(
+			tokenId: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<BigNumber>;
+
+		gem(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+		gemURI(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<BigNumber>;
@@ -1175,14 +1321,17 @@ export class Arcade extends BaseContract {
 			overrides?: CallOverrides
 		): Promise<BigNumber>;
 
-		glass(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+		hasPreset(overrides?: CallOverrides): Promise<BigNumber>;
 
-		glassURI(
+		helmet(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<BigNumber>;
 
-		hasPreset(overrides?: CallOverrides): Promise<BigNumber>;
+		helmetURI(
+			tokenId: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<BigNumber>;
 
 		isApprovedForAll(
 			owner: string,
@@ -1194,7 +1343,19 @@ export class Arcade extends BaseContract {
 
 		level(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
+		levelSteps(
+			arg0: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<BigNumber>;
+
 		levelURI(
+			tokenId: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<BigNumber>;
+
+		mask(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+		maskURI(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<BigNumber>;
@@ -1209,6 +1370,7 @@ export class Arcade extends BaseContract {
 		metaIds(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
 		mint(
+			to: string,
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<BigNumber>;
 
@@ -1222,7 +1384,7 @@ export class Arcade extends BaseContract {
 		): Promise<BigNumber>;
 
 		preset(
-			account: string,
+			to: string,
 			metaIds_: BigNumberish[],
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<BigNumber>;
@@ -1261,16 +1423,14 @@ export class Arcade extends BaseContract {
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<BigNumber>;
 
-		setComponentsBaseURI(
-			uri_: string,
+		setCharactorURI(
+			_uri: string,
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<BigNumber>;
 
-		shape(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
-
-		shapeURI(
-			tokenId: BigNumberish,
-			overrides?: CallOverrides
+		setComponentsBaseURI(
+			uri_: string,
+			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<BigNumber>;
 
 		supportsInterface(
@@ -1327,6 +1487,22 @@ export class Arcade extends BaseContract {
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<PopulatedTransaction>;
 
+		armor(
+			tokenId: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<PopulatedTransaction>;
+
+		armorURI(
+			tokenId: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<PopulatedTransaction>;
+
+		attribute(
+			tokenId: BigNumberish,
+			attributeTag: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<PopulatedTransaction>;
+
 		background(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
@@ -1344,25 +1520,22 @@ export class Arcade extends BaseContract {
 
 		baseURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-		blockAttribute(
+		character(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<PopulatedTransaction>;
 
-		blockAttributeURI(
+		characterSteps(
+			arg0: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<PopulatedTransaction>;
+
+		characterURI(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<PopulatedTransaction>;
 
-		combatSuit(
-			tokenId: BigNumberish,
-			overrides?: CallOverrides
-		): Promise<PopulatedTransaction>;
-
-		combatSuitURI(
-			tokenId: BigNumberish,
-			overrides?: CallOverrides
-		): Promise<PopulatedTransaction>;
+		charactorURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
 		componentsBaseURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1371,12 +1544,22 @@ export class Arcade extends BaseContract {
 			overrides?: CallOverrides
 		): Promise<PopulatedTransaction>;
 
-		facialAccessories(
+		earmuff(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<PopulatedTransaction>;
 
-		facialAccessoriesURI(
+		earmuffURI(
+			tokenId: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<PopulatedTransaction>;
+
+		gem(
+			tokenId: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<PopulatedTransaction>;
+
+		gemURI(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<PopulatedTransaction>;
@@ -1391,17 +1574,17 @@ export class Arcade extends BaseContract {
 			overrides?: CallOverrides
 		): Promise<PopulatedTransaction>;
 
-		glass(
-			tokenId: BigNumberish,
-			overrides?: CallOverrides
-		): Promise<PopulatedTransaction>;
-
-		glassURI(
-			tokenId: BigNumberish,
-			overrides?: CallOverrides
-		): Promise<PopulatedTransaction>;
-
 		hasPreset(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+		helmet(
+			tokenId: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<PopulatedTransaction>;
+
+		helmetURI(
+			tokenId: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<PopulatedTransaction>;
 
 		isApprovedForAll(
 			owner: string,
@@ -1416,7 +1599,22 @@ export class Arcade extends BaseContract {
 			overrides?: CallOverrides
 		): Promise<PopulatedTransaction>;
 
+		levelSteps(
+			arg0: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<PopulatedTransaction>;
+
 		levelURI(
+			tokenId: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<PopulatedTransaction>;
+
+		mask(
+			tokenId: BigNumberish,
+			overrides?: CallOverrides
+		): Promise<PopulatedTransaction>;
+
+		maskURI(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<PopulatedTransaction>;
@@ -1434,6 +1632,7 @@ export class Arcade extends BaseContract {
 		): Promise<PopulatedTransaction>;
 
 		mint(
+			to: string,
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<PopulatedTransaction>;
 
@@ -1447,7 +1646,7 @@ export class Arcade extends BaseContract {
 		): Promise<PopulatedTransaction>;
 
 		preset(
-			account: string,
+			to: string,
 			metaIds_: BigNumberish[],
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<PopulatedTransaction>;
@@ -1486,19 +1685,14 @@ export class Arcade extends BaseContract {
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<PopulatedTransaction>;
 
-		setComponentsBaseURI(
-			uri_: string,
+		setCharactorURI(
+			_uri: string,
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<PopulatedTransaction>;
 
-		shape(
-			tokenId: BigNumberish,
-			overrides?: CallOverrides
-		): Promise<PopulatedTransaction>;
-
-		shapeURI(
-			tokenId: BigNumberish,
-			overrides?: CallOverrides
+		setComponentsBaseURI(
+			uri_: string,
+			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<PopulatedTransaction>;
 
 		supportsInterface(

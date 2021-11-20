@@ -33,6 +33,9 @@ export default class NTF extends Vue {
 	@Prop()
 	token!: Entity.NFT
 
+	wfactor = 1.0
+	hfactor = 1.0
+
 	@Watch('token')
 	async onMetaIdChanged(token: Entity.NFT) {
 		await this.drawNFT()
@@ -59,74 +62,51 @@ export default class NTF extends Vue {
 	}
 
 	async drawNFT() {
-		const level = this.attributes(0)
-		const armor = this.attributes(1)
-		const gem = this.attributes(2)
-		const earmuff = this.attributes(3)
-		const mask = this.attributes(4)
-		const glass = this.attributes(5)
 		const width = this.size.width
 		const height = this.size.height
 		this.getCanvas(width, height)
 		const ctx = this.canvas.getContext('2d')!
-		// ctx.fillStyle = '#FF0000'
-		// ctx.fillRect(0, 0, width, height)
-		// var grd = ctx.createLinearGradient(0,0,200,0);
-		// grd.addColorStop(0,"red");
-		// grd.addColorStop(1,"white");
-
-		// base
-		await this.drawImage(ctx, `/0/${level}`, 0, 0, width, height)
-		// armor
-		await this.drawImage(
-			ctx,
-			`/1/${armor}`,
-			0,
-			0.66 * height,
-			width,
-			0.34 * height
-		)
-		// gem
-		await this.drawImage(
-			ctx,
-			`/2/${gem}`,
-			0.43 * width,
-			0.84 * height,
-			0.139 * width,
-			0.12 * height
-		)
-		// earmuff
-		await this.drawImage(
-			ctx,
-			`/3/${earmuff}`,
-			0.21 * width,
-			0.28 * height,
-			0.58 * width,
-			0.2 * height
-		)
-		// mask
-		await this.drawImage(
-			ctx,
-			`/4/${mask}`,
-			0.295 * width,
-			0.44 * height,
-			0.41 * width,
-			0.28 * height
-		)
-		// glass
-		await this.drawImage(
-			ctx,
-			`/5/${glass}`,
-			0.273 * width,
-			0.26 * height,
-			0.453 * width,
-			0.2 * height
-		)
+		for (let i = 0; i < 8; i++) {
+			await this.drawImage(ctx, i)
+		}
 
 		// const link = document.createElement('a')
 		// link.download = this.token.tokenId.toString()
 		// link.href = this.canvas.toDataURL()
 		// link.click()
+	}
+
+	async drawImage(ctx: CanvasRenderingContext2D, attributeTag: number) {
+		const attribute = this.attributes(attributeTag)
+		const attributeImage = await this.getImage(
+			ctx,
+			`/${attributeTag}/${attribute}`
+		)
+		ctx.drawImage(attributeImage, 0, 0, this.size.width, this.size.height)
+	}
+
+	async drawAttribute(
+		ctx: CanvasRenderingContext2D,
+		attributeTag: number,
+		yOffset: (imageHeight: number) => number
+	): Promise<Entity.ImageSize> {
+		const attribute = this.attributes(attributeTag)
+		const attributeImage = await this.getImage(
+			ctx,
+			`/${attributeTag}/${attribute}`
+		)
+		const attributeImageSize: Entity.ImageSize = {
+			width: attributeImage.width * this.wfactor,
+			height: attributeImage.height * this.hfactor,
+		}
+		ctx.drawImage(
+			attributeImage,
+			(this.size.width - attributeImageSize.width) / 2,
+			yOffset(attributeImageSize.height),
+			attributeImageSize.width,
+			attributeImageSize.height
+		)
+		return attributeImageSize
 	}
 
 	attributes(tag: number): number {
@@ -136,23 +116,18 @@ export default class NTF extends Vue {
 			.toNumber()
 	}
 
-	async drawImage(
+	async getImage(
 		ctx: CanvasRenderingContext2D,
-		imageURI: string,
-		x: number,
-		y: number,
-		w: number,
-		h: number
-	) {
+		imageURI: string
+	): Promise<HTMLImageElement> {
 		const baseURL =
-			'https://mygateway.mypinata.cloud/ipfs/QmYoKkLhCbL6jMgDVXoszArr7NtpYCm5Wz24FJh5g4qoMW'
+			'https://mygateway.mypinata.cloud/ipfs/QmPrKVbQKQKhrg7CLgUkQwzzWRjrXvKbjTbnPJTVQW7Fnq'
 		const res = await axios.get(baseURL + imageURI)
 		const image = new Image()
 		image.src = res.data
 		return new Promise((resolve) => {
 			image.onload = () => {
-				ctx.drawImage(image, x, y, w, h)
-				resolve(1)
+				resolve(image)
 			}
 		})
 	}
@@ -161,8 +136,8 @@ export default class NTF extends Vue {
 		if (!this.canvas) {
 			// this.canvas = document.createElement('canvas')
 			this.canvas = document.getElementById(this.canvsId)! as HTMLCanvasElement
-			this.canvas.width = w
-			this.canvas.height = h
+			this.canvas.width = this.size.width
+			this.canvas.height = this.size.height
 		}
 	}
 

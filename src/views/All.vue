@@ -1,7 +1,7 @@
 <template>
 	<div style="width: 100%">
 		<a-form>
-			<a-form-item :label="`All NFTs(${nfts.length}).`">
+			<a-form-item :label="`All NFTs(${total}).`">
 				<div class="nft-display">
 					<NFT
 						v-for="(token, i) in nfts"
@@ -13,6 +13,15 @@
 					/>
 				</div>
 			</a-form-item>
+			<a-pagination
+				v-if="total > 0"
+				v-model="page"
+				style="margin-bottom: 16px"
+				show-less-items
+				:total="total"
+				:page-size.sync="pageSize"
+				@change="onPageChange"
+			/>
 		</a-form>
 	</div>
 </template>
@@ -31,9 +40,12 @@ import NFT from '@/components/NFT.vue'
 export default class All extends Vue {
 	loading = false
 	hasNFT = false
+	pageSize = 21
+	page = 1
+	total = 0
 	nfts: Entity.NFT[] = []
 	nftSize: Entity.ImageSize = {
-		width: 440,
+		width: 400,
 		height: 400,
 	}
 
@@ -48,13 +60,36 @@ export default class All extends Vue {
 		await this.getAllNFTs()
 	}
 
+	onPageChange(page: number) {
+		this.page = page
+		this.getAllNFTs()
+	}
+
 	async getAllNFTs() {
 		const total = await arcade.totalSupply()
-		const promises: Promise<any>[] = []
-		for (let i = 0; i < total.toNumber(); i++) {
-			promises.push(this.getNFT(i))
+		this.total = total.toNumber()
+		const pageSize = this.pageSize
+		const offset = (this.page - 1) * pageSize
+		const end = Math.min(offset + this.pageSize, this.total)
+		const promises = []
+		for (let i = offset; i < end; i++) {
+			promises.push(this.addNFT(i))
 		}
 		await Promise.all(promises)
+	}
+
+	async addNFT(i: number) {
+		this.nfts = []
+		const ps: Promise<any>[] = []
+		const tokenId = await arcade.tokenByIndex(i)
+		ps.push(arcade.metaIds(tokenId))
+		ps.push(arcade.ownerOf(tokenId))
+		const [metaId, owner] = await Promise.all(ps)
+		this.nfts.push({
+			owner,
+			tokenId,
+			metaId,
+		})
 	}
 
 	async getNFT(i: number) {

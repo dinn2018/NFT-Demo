@@ -43,8 +43,8 @@ export default class Home extends Vue {
 	loading = false
 	nfts: Entity.NFT[] = []
 	nftSize: Entity.ImageSize = {
-		width: 440,
-		height: 400,
+		width: 200,
+		height: 200,
 	}
 
 	async created() {
@@ -56,7 +56,7 @@ export default class Home extends Vue {
 			this.loading = true
 			const signer = provider.getSigner()
 			const from = await signer.getAddress()
-			const data = arcade.interface.encodeFunctionData('mint')
+			const data = arcade.interface.encodeFunctionData('mint', [from])
 			const tx = await signer.sendTransaction({ from, to: arcadeAddress, data })
 			await tx.wait()
 			this.getMyNFTs()
@@ -70,7 +70,7 @@ export default class Home extends Vue {
 	async getMyNFTs() {
 		const from = await provider.getSigner().getAddress()
 		const total = await arcade.balanceOf(from)
-		const promises: Promise<any>[] = []
+		const promises = []
 		for (let i = 0; i < total.toNumber(); i++) {
 			promises.push(this.getNFT(from, i))
 		}
