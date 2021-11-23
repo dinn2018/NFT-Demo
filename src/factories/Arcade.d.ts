@@ -21,6 +21,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface ArcadeInterface extends ethers.utils.Interface {
 	functions: {
+		"MaxMints()": FunctionFragment;
 		"approve(address,uint256)": FunctionFragment;
 		"armor(uint256)": FunctionFragment;
 		"armorURI(uint256)": FunctionFragment;
@@ -30,9 +31,7 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		"balanceOf(address)": FunctionFragment;
 		"baseURI()": FunctionFragment;
 		"character(uint256)": FunctionFragment;
-		"characterSteps(uint256)": FunctionFragment;
 		"characterURI(uint256)": FunctionFragment;
-		"charactorURI()": FunctionFragment;
 		"componentsBaseURI()": FunctionFragment;
 		"customeURI(uint256)": FunctionFragment;
 		"earmuff(uint256)": FunctionFragment;
@@ -46,12 +45,13 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		"helmetURI(uint256)": FunctionFragment;
 		"isApprovedForAll(address,address)": FunctionFragment;
 		"isSaleOpen()": FunctionFragment;
+		"isWhiteAllowed(address)": FunctionFragment;
+		"isWhiteMinted(address)": FunctionFragment;
 		"level(uint256)": FunctionFragment;
 		"levelSteps(uint256)": FunctionFragment;
 		"levelURI(uint256)": FunctionFragment;
 		"mask(uint256)": FunctionFragment;
 		"maskURI(uint256)": FunctionFragment;
-		"maxMintx()": FunctionFragment;
 		"metaIdExsits(uint256)": FunctionFragment;
 		"metaIds(uint256)": FunctionFragment;
 		"mint(address)": FunctionFragment;
@@ -65,8 +65,8 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		"saleStart()": FunctionFragment;
 		"setApprovalForAll(address,bool)": FunctionFragment;
 		"setBaseURI(string)": FunctionFragment;
-		"setCharactorURI(string)": FunctionFragment;
 		"setComponentsBaseURI(string)": FunctionFragment;
+		"setWhitelist(address[],bool)": FunctionFragment;
 		"supportsInterface(bytes4)": FunctionFragment;
 		"symbol()": FunctionFragment;
 		"tokenByIndex(uint256)": FunctionFragment;
@@ -75,11 +75,14 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		"tokenReceiver()": FunctionFragment;
 		"tokenURI(uint256)": FunctionFragment;
 		"totalSupply()": FunctionFragment;
+		"totalWhiteList()": FunctionFragment;
 		"transferFrom(address,address,uint256)": FunctionFragment;
 		"transferOwnership(address)": FunctionFragment;
 		"transferTokenReceiver(address)": FunctionFragment;
+		"whitelist(address)": FunctionFragment;
 	};
 
+	encodeFunctionData(functionFragment: "MaxMints", values?: undefined): string;
 	encodeFunctionData(
 		functionFragment: "approve",
 		values: [string, BigNumberish]
@@ -108,16 +111,8 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		values: [BigNumberish]
 	): string;
 	encodeFunctionData(
-		functionFragment: "characterSteps",
-		values: [BigNumberish]
-	): string;
-	encodeFunctionData(
 		functionFragment: "characterURI",
 		values: [BigNumberish]
-	): string;
-	encodeFunctionData(
-		functionFragment: "charactorURI",
-		values?: undefined
 	): string;
 	encodeFunctionData(
 		functionFragment: "componentsBaseURI",
@@ -165,6 +160,14 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		functionFragment: "isSaleOpen",
 		values?: undefined
 	): string;
+	encodeFunctionData(
+		functionFragment: "isWhiteAllowed",
+		values: [string]
+	): string;
+	encodeFunctionData(
+		functionFragment: "isWhiteMinted",
+		values: [string]
+	): string;
 	encodeFunctionData(functionFragment: "level", values: [BigNumberish]): string;
 	encodeFunctionData(
 		functionFragment: "levelSteps",
@@ -179,7 +182,6 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		functionFragment: "maskURI",
 		values: [BigNumberish]
 	): string;
-	encodeFunctionData(functionFragment: "maxMintx", values?: undefined): string;
 	encodeFunctionData(
 		functionFragment: "metaIdExsits",
 		values: [BigNumberish]
@@ -215,12 +217,12 @@ interface ArcadeInterface extends ethers.utils.Interface {
 	): string;
 	encodeFunctionData(functionFragment: "setBaseURI", values: [string]): string;
 	encodeFunctionData(
-		functionFragment: "setCharactorURI",
+		functionFragment: "setComponentsBaseURI",
 		values: [string]
 	): string;
 	encodeFunctionData(
-		functionFragment: "setComponentsBaseURI",
-		values: [string]
+		functionFragment: "setWhitelist",
+		values: [string[], boolean]
 	): string;
 	encodeFunctionData(
 		functionFragment: "supportsInterface",
@@ -252,6 +254,10 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		values?: undefined
 	): string;
 	encodeFunctionData(
+		functionFragment: "totalWhiteList",
+		values?: undefined
+	): string;
+	encodeFunctionData(
 		functionFragment: "transferFrom",
 		values: [string, string, BigNumberish]
 	): string;
@@ -263,7 +269,9 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		functionFragment: "transferTokenReceiver",
 		values: [string]
 	): string;
+	encodeFunctionData(functionFragment: "whitelist", values: [string]): string;
 
+	decodeFunctionResult(functionFragment: "MaxMints", data: BytesLike): Result;
 	decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
 	decodeFunctionResult(functionFragment: "armor", data: BytesLike): Result;
 	decodeFunctionResult(functionFragment: "armorURI", data: BytesLike): Result;
@@ -277,15 +285,7 @@ interface ArcadeInterface extends ethers.utils.Interface {
 	decodeFunctionResult(functionFragment: "baseURI", data: BytesLike): Result;
 	decodeFunctionResult(functionFragment: "character", data: BytesLike): Result;
 	decodeFunctionResult(
-		functionFragment: "characterSteps",
-		data: BytesLike
-	): Result;
-	decodeFunctionResult(
 		functionFragment: "characterURI",
-		data: BytesLike
-	): Result;
-	decodeFunctionResult(
-		functionFragment: "charactorURI",
 		data: BytesLike
 	): Result;
 	decodeFunctionResult(
@@ -313,12 +313,19 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		data: BytesLike
 	): Result;
 	decodeFunctionResult(functionFragment: "isSaleOpen", data: BytesLike): Result;
+	decodeFunctionResult(
+		functionFragment: "isWhiteAllowed",
+		data: BytesLike
+	): Result;
+	decodeFunctionResult(
+		functionFragment: "isWhiteMinted",
+		data: BytesLike
+	): Result;
 	decodeFunctionResult(functionFragment: "level", data: BytesLike): Result;
 	decodeFunctionResult(functionFragment: "levelSteps", data: BytesLike): Result;
 	decodeFunctionResult(functionFragment: "levelURI", data: BytesLike): Result;
 	decodeFunctionResult(functionFragment: "mask", data: BytesLike): Result;
 	decodeFunctionResult(functionFragment: "maskURI", data: BytesLike): Result;
-	decodeFunctionResult(functionFragment: "maxMintx", data: BytesLike): Result;
 	decodeFunctionResult(
 		functionFragment: "metaIdExsits",
 		data: BytesLike
@@ -345,11 +352,11 @@ interface ArcadeInterface extends ethers.utils.Interface {
 	): Result;
 	decodeFunctionResult(functionFragment: "setBaseURI", data: BytesLike): Result;
 	decodeFunctionResult(
-		functionFragment: "setCharactorURI",
+		functionFragment: "setComponentsBaseURI",
 		data: BytesLike
 	): Result;
 	decodeFunctionResult(
-		functionFragment: "setComponentsBaseURI",
+		functionFragment: "setWhitelist",
 		data: BytesLike
 	): Result;
 	decodeFunctionResult(
@@ -376,6 +383,10 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		data: BytesLike
 	): Result;
 	decodeFunctionResult(
+		functionFragment: "totalWhiteList",
+		data: BytesLike
+	): Result;
+	decodeFunctionResult(
 		functionFragment: "transferFrom",
 		data: BytesLike
 	): Result;
@@ -387,6 +398,7 @@ interface ArcadeInterface extends ethers.utils.Interface {
 		functionFragment: "transferTokenReceiver",
 		data: BytesLike
 	): Result;
+	decodeFunctionResult(functionFragment: "whitelist", data: BytesLike): Result;
 
 	events: {
 		"Approval(address,address,uint256)": EventFragment;
@@ -480,6 +492,8 @@ export class Arcade extends BaseContract {
 	interface: ArcadeInterface;
 
 	functions: {
+		MaxMints(overrides?: CallOverrides): Promise<[BigNumber]>;
+
 		approve(
 			to: string,
 			tokenId: BigNumberish,
@@ -521,17 +535,10 @@ export class Arcade extends BaseContract {
 			overrides?: CallOverrides
 		): Promise<[BigNumber]>;
 
-		characterSteps(
-			arg0: BigNumberish,
-			overrides?: CallOverrides
-		): Promise<[number]>;
-
 		characterURI(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<[string]>;
-
-		charactorURI(overrides?: CallOverrides): Promise<[string]>;
 
 		componentsBaseURI(overrides?: CallOverrides): Promise<[string]>;
 
@@ -584,6 +591,10 @@ export class Arcade extends BaseContract {
 
 		isSaleOpen(overrides?: CallOverrides): Promise<[boolean]>;
 
+		isWhiteAllowed(to: string, overrides?: CallOverrides): Promise<[boolean]>;
+
+		isWhiteMinted(to: string, overrides?: CallOverrides): Promise<[boolean]>;
+
 		level(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
@@ -608,8 +619,6 @@ export class Arcade extends BaseContract {
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<[string]>;
-
-		maxMintx(overrides?: CallOverrides): Promise<[BigNumber]>;
 
 		metaIdExsits(
 			arg0: BigNumberish,
@@ -675,13 +684,14 @@ export class Arcade extends BaseContract {
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<ContractTransaction>;
 
-		setCharactorURI(
-			_uri: string,
+		setComponentsBaseURI(
+			uri_: string,
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<ContractTransaction>;
 
-		setComponentsBaseURI(
-			uri_: string,
+		setWhitelist(
+			whitelist_: string[],
+			isAllowed: boolean,
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<ContractTransaction>;
 
@@ -714,6 +724,8 @@ export class Arcade extends BaseContract {
 
 		totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+		totalWhiteList(overrides?: CallOverrides): Promise<[BigNumber]>;
+
 		transferFrom(
 			from: string,
 			to: string,
@@ -730,7 +742,14 @@ export class Arcade extends BaseContract {
 			newReceiver: string,
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<ContractTransaction>;
+
+		whitelist(
+			arg0: string,
+			overrides?: CallOverrides
+		): Promise<[boolean, boolean] & { isAllowed: boolean; isMinted: boolean }>;
 	};
+
+	MaxMints(overrides?: CallOverrides): Promise<BigNumber>;
 
 	approve(
 		to: string,
@@ -767,17 +786,10 @@ export class Arcade extends BaseContract {
 		overrides?: CallOverrides
 	): Promise<BigNumber>;
 
-	characterSteps(
-		arg0: BigNumberish,
-		overrides?: CallOverrides
-	): Promise<number>;
-
 	characterURI(
 		tokenId: BigNumberish,
 		overrides?: CallOverrides
 	): Promise<string>;
-
-	charactorURI(overrides?: CallOverrides): Promise<string>;
 
 	componentsBaseURI(overrides?: CallOverrides): Promise<string>;
 
@@ -815,6 +827,10 @@ export class Arcade extends BaseContract {
 
 	isSaleOpen(overrides?: CallOverrides): Promise<boolean>;
 
+	isWhiteAllowed(to: string, overrides?: CallOverrides): Promise<boolean>;
+
+	isWhiteMinted(to: string, overrides?: CallOverrides): Promise<boolean>;
+
 	level(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
 	levelSteps(arg0: BigNumberish, overrides?: CallOverrides): Promise<number>;
@@ -824,8 +840,6 @@ export class Arcade extends BaseContract {
 	mask(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
 	maskURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
-	maxMintx(overrides?: CallOverrides): Promise<BigNumber>;
 
 	metaIdExsits(arg0: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
 
@@ -882,13 +896,14 @@ export class Arcade extends BaseContract {
 		overrides?: Overrides & { from?: string | Promise<string> }
 	): Promise<ContractTransaction>;
 
-	setCharactorURI(
-		_uri: string,
+	setComponentsBaseURI(
+		uri_: string,
 		overrides?: Overrides & { from?: string | Promise<string> }
 	): Promise<ContractTransaction>;
 
-	setComponentsBaseURI(
-		uri_: string,
+	setWhitelist(
+		whitelist_: string[],
+		isAllowed: boolean,
 		overrides?: Overrides & { from?: string | Promise<string> }
 	): Promise<ContractTransaction>;
 
@@ -918,6 +933,8 @@ export class Arcade extends BaseContract {
 
 	totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
+	totalWhiteList(overrides?: CallOverrides): Promise<BigNumber>;
+
 	transferFrom(
 		from: string,
 		to: string,
@@ -935,7 +952,14 @@ export class Arcade extends BaseContract {
 		overrides?: Overrides & { from?: string | Promise<string> }
 	): Promise<ContractTransaction>;
 
+	whitelist(
+		arg0: string,
+		overrides?: CallOverrides
+	): Promise<[boolean, boolean] & { isAllowed: boolean; isMinted: boolean }>;
+
 	callStatic: {
+		MaxMints(overrides?: CallOverrides): Promise<BigNumber>;
+
 		approve(
 			to: string,
 			tokenId: BigNumberish,
@@ -971,17 +995,10 @@ export class Arcade extends BaseContract {
 			overrides?: CallOverrides
 		): Promise<BigNumber>;
 
-		characterSteps(
-			arg0: BigNumberish,
-			overrides?: CallOverrides
-		): Promise<number>;
-
 		characterURI(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<string>;
-
-		charactorURI(overrides?: CallOverrides): Promise<string>;
 
 		componentsBaseURI(overrides?: CallOverrides): Promise<string>;
 
@@ -1031,6 +1048,10 @@ export class Arcade extends BaseContract {
 
 		isSaleOpen(overrides?: CallOverrides): Promise<boolean>;
 
+		isWhiteAllowed(to: string, overrides?: CallOverrides): Promise<boolean>;
+
+		isWhiteMinted(to: string, overrides?: CallOverrides): Promise<boolean>;
+
 		level(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
 		levelSteps(arg0: BigNumberish, overrides?: CallOverrides): Promise<number>;
@@ -1040,8 +1061,6 @@ export class Arcade extends BaseContract {
 		mask(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
 		maskURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
-		maxMintx(overrides?: CallOverrides): Promise<BigNumber>;
 
 		metaIdExsits(
 			arg0: BigNumberish,
@@ -1093,10 +1112,14 @@ export class Arcade extends BaseContract {
 
 		setBaseURI(uri_: string, overrides?: CallOverrides): Promise<void>;
 
-		setCharactorURI(_uri: string, overrides?: CallOverrides): Promise<void>;
-
 		setComponentsBaseURI(
 			uri_: string,
+			overrides?: CallOverrides
+		): Promise<void>;
+
+		setWhitelist(
+			whitelist_: string[],
+			isAllowed: boolean,
 			overrides?: CallOverrides
 		): Promise<void>;
 
@@ -1126,6 +1149,8 @@ export class Arcade extends BaseContract {
 
 		totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
+		totalWhiteList(overrides?: CallOverrides): Promise<BigNumber>;
+
 		transferFrom(
 			from: string,
 			to: string,
@@ -1142,6 +1167,11 @@ export class Arcade extends BaseContract {
 			newReceiver: string,
 			overrides?: CallOverrides
 		): Promise<void>;
+
+		whitelist(
+			arg0: string,
+			overrides?: CallOverrides
+		): Promise<[boolean, boolean] & { isAllowed: boolean; isMinted: boolean }>;
 	};
 
 	filters: {
@@ -1237,6 +1267,8 @@ export class Arcade extends BaseContract {
 	};
 
 	estimateGas: {
+		MaxMints(overrides?: CallOverrides): Promise<BigNumber>;
+
 		approve(
 			to: string,
 			tokenId: BigNumberish,
@@ -1275,17 +1307,10 @@ export class Arcade extends BaseContract {
 			overrides?: CallOverrides
 		): Promise<BigNumber>;
 
-		characterSteps(
-			arg0: BigNumberish,
-			overrides?: CallOverrides
-		): Promise<BigNumber>;
-
 		characterURI(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<BigNumber>;
-
-		charactorURI(overrides?: CallOverrides): Promise<BigNumber>;
 
 		componentsBaseURI(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1341,6 +1366,10 @@ export class Arcade extends BaseContract {
 
 		isSaleOpen(overrides?: CallOverrides): Promise<BigNumber>;
 
+		isWhiteAllowed(to: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+		isWhiteMinted(to: string, overrides?: CallOverrides): Promise<BigNumber>;
+
 		level(tokenId: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
 		levelSteps(
@@ -1359,8 +1388,6 @@ export class Arcade extends BaseContract {
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<BigNumber>;
-
-		maxMintx(overrides?: CallOverrides): Promise<BigNumber>;
 
 		metaIdExsits(
 			arg0: BigNumberish,
@@ -1423,13 +1450,14 @@ export class Arcade extends BaseContract {
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<BigNumber>;
 
-		setCharactorURI(
-			_uri: string,
+		setComponentsBaseURI(
+			uri_: string,
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<BigNumber>;
 
-		setComponentsBaseURI(
-			uri_: string,
+		setWhitelist(
+			whitelist_: string[],
+			isAllowed: boolean,
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<BigNumber>;
 
@@ -1462,6 +1490,8 @@ export class Arcade extends BaseContract {
 
 		totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
+		totalWhiteList(overrides?: CallOverrides): Promise<BigNumber>;
+
 		transferFrom(
 			from: string,
 			to: string,
@@ -1478,9 +1508,13 @@ export class Arcade extends BaseContract {
 			newReceiver: string,
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<BigNumber>;
+
+		whitelist(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 	};
 
 	populateTransaction: {
+		MaxMints(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
 		approve(
 			to: string,
 			tokenId: BigNumberish,
@@ -1525,17 +1559,10 @@ export class Arcade extends BaseContract {
 			overrides?: CallOverrides
 		): Promise<PopulatedTransaction>;
 
-		characterSteps(
-			arg0: BigNumberish,
-			overrides?: CallOverrides
-		): Promise<PopulatedTransaction>;
-
 		characterURI(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<PopulatedTransaction>;
-
-		charactorURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
 		componentsBaseURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1594,6 +1621,16 @@ export class Arcade extends BaseContract {
 
 		isSaleOpen(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+		isWhiteAllowed(
+			to: string,
+			overrides?: CallOverrides
+		): Promise<PopulatedTransaction>;
+
+		isWhiteMinted(
+			to: string,
+			overrides?: CallOverrides
+		): Promise<PopulatedTransaction>;
+
 		level(
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
@@ -1618,8 +1655,6 @@ export class Arcade extends BaseContract {
 			tokenId: BigNumberish,
 			overrides?: CallOverrides
 		): Promise<PopulatedTransaction>;
-
-		maxMintx(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
 		metaIdExsits(
 			arg0: BigNumberish,
@@ -1685,13 +1720,14 @@ export class Arcade extends BaseContract {
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<PopulatedTransaction>;
 
-		setCharactorURI(
-			_uri: string,
+		setComponentsBaseURI(
+			uri_: string,
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<PopulatedTransaction>;
 
-		setComponentsBaseURI(
-			uri_: string,
+		setWhitelist(
+			whitelist_: string[],
+			isAllowed: boolean,
 			overrides?: Overrides & { from?: string | Promise<string> }
 		): Promise<PopulatedTransaction>;
 
@@ -1724,6 +1760,8 @@ export class Arcade extends BaseContract {
 
 		totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+		totalWhiteList(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
 		transferFrom(
 			from: string,
 			to: string,
@@ -1739,6 +1777,11 @@ export class Arcade extends BaseContract {
 		transferTokenReceiver(
 			newReceiver: string,
 			overrides?: Overrides & { from?: string | Promise<string> }
+		): Promise<PopulatedTransaction>;
+
+		whitelist(
+			arg0: string,
+			overrides?: CallOverrides
 		): Promise<PopulatedTransaction>;
 	};
 }

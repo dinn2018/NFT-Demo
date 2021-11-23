@@ -43,8 +43,8 @@ export default class Home extends Vue {
 	loading = false
 	nfts: Entity.NFT[] = []
 	nftSize: Entity.ImageSize = {
-		width: 200,
-		height: 200,
+		width: 400,
+		height: 400,
 	}
 
 	async created() {

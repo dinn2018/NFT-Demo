@@ -38,6 +38,8 @@ export const formatNetwork = (chainId: number) => {
 			return 'Goerli'
 		case 0x2a:
 			return 'Kovan'
+		case 1337:
+			return 'Localhost'
 		default:
 			return 'Unknown'
 	}
