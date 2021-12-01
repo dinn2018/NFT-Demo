@@ -3,7 +3,7 @@ import { Arcade__factory } from './Arcade__factory'
 import { ERC20__factory } from './ERC20__factory'
 import { ERC20 } from './ERC20'
 
-const arcadeAddress = '0xD0E6A82A908318513A3D7996d87cd9120c876c0C'
+const arcadeAddress = '0xC4829005c86e3054d0e368a915ebFaf42A3310b6'
 const provider = new providers.Web3Provider(window.ethereum as any)
 const arcade = Arcade__factory.connect(
 	arcadeAddress,

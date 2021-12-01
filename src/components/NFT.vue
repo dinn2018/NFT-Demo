@@ -1,6 +1,10 @@
 <template>
 	<div>
-		<canvas :id="canvsId" />
+		<a-card
+			:id="canvsId"
+			:loading="loading"
+			:style="style"
+		/>
 		<p style="line-height: 1.2">
 			owner:{{ owner }}<br>
 			token id:{{ tokenId }}<br>
@@ -23,6 +27,7 @@ import axios from 'axios'
 @Component
 export default class NTF extends Vue {
 	canvas!: HTMLCanvasElement
+	loading = false
 
 	@Prop()
 	size!: Entity.ImageSize
@@ -41,8 +46,12 @@ export default class NTF extends Vue {
 		await this.drawNFT()
 	}
 
-	mounted() {
-		this.drawNFT()
+	async mounted() {
+		await this.drawNFT()
+	}
+
+	get style() {
+		return `postion:relative; top:0; left:0; width:${this.size.width}px;height:${this.size.height}px;`
 	}
 
 	get canvsId() {
@@ -62,13 +71,15 @@ export default class NTF extends Vue {
 	}
 
 	async drawNFT() {
-		const width = this.size.width
-		const height = this.size.height
-		this.getCanvas(width, height)
+		this.loading = true
+		this.getCanvas()
 		const ctx = this.canvas.getContext('2d')!
 		for (let i = 0; i < 8; i++) {
 			await this.drawImage(ctx, i)
 		}
+		const card = document.getElementById(this.canvsId)!
+		card.appendChild(this.canvas)
+		this.loading = false
 
 		// const link = document.createElement('a')
 		// link.download = this.token.tokenId.toString()
@@ -132,10 +143,10 @@ export default class NTF extends Vue {
 		})
 	}
 
-	getCanvas(w: number, h: number) {
+	getCanvas() {
 		if (!this.canvas) {
-			// this.canvas = document.createElement('canvas')
-			this.canvas = document.getElementById(this.canvsId)! as HTMLCanvasElement
+			this.canvas = document.createElement('canvas')
+			// this.canvas = document.getElementById(this.canvsId)! as HTMLCanvasElement
 			this.canvas.width = this.size.width
 			this.canvas.height = this.size.height
 		}
