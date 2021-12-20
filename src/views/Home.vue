@@ -62,7 +62,6 @@ export default class Home extends Vue {
 			const isWhiteOpen = await arcade.isWhiteOpen()
 			let data: string
 			if (isWhiteOpen && isWhiteAllowed && !isWhiteMinted) {
-				arcade.interface
 				data = arcade.interface.encodeFunctionData('whiteMint', [from])
 			} else {
 				data = arcade.interface.encodeFunctionData('mint', [from])
