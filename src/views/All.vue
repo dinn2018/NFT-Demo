@@ -40,7 +40,7 @@ import NFT from '@/components/NFT.vue'
 export default class All extends Vue {
 	loading = false
 	hasNFT = false
-	pageSize = 21
+	pageSize = 10
 	page = 1
 	total = 0
 	nfts: Entity.NFT[] = []

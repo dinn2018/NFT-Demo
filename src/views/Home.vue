@@ -32,6 +32,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { arcadeAddress, arcade, provider } from '@/factories'
+import { BigNumber } from 'ethers'
 import NFT from '@/components/NFT.vue'
 
 @Component({
@@ -56,8 +57,22 @@ export default class Home extends Vue {
 			this.loading = true
 			const signer = provider.getSigner()
 			const from = await signer.getAddress()
-			const data = arcade.interface.encodeFunctionData('mint', [from])
-			const tx = await signer.sendTransaction({ from, to: arcadeAddress, data })
+			const isWhiteAllowed = await arcade.isWhiteAllowed(from)
+			const isWhiteMinted = await arcade.isWhiteMinted(from)
+			const isWhiteOpen = await arcade.isWhiteOpen()
+			let data: string
+			if (isWhiteOpen && isWhiteAllowed && !isWhiteMinted) {
+				arcade.interface
+				data = arcade.interface.encodeFunctionData('whiteMint', [from])
+			} else {
+				data = arcade.interface.encodeFunctionData('mint', [from])
+			}
+			const tx = await signer.sendTransaction({
+				from,
+				to: arcadeAddress,
+				data,
+				value: BigNumber.from((8e16).toString()),
+			})
 			await tx.wait()
 			this.getMyNFTs()
 		} catch (e) {

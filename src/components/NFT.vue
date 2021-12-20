@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<a-card
+		<div
 			:id="canvsId"
 			:loading="loading"
 			:style="style"
@@ -38,9 +38,6 @@ export default class NTF extends Vue {
 	@Prop()
 	token!: Entity.NFT
 
-	wfactor = 1.0
-	hfactor = 1.0
-
 	@Watch('token')
 	async onMetaIdChanged(token: Entity.NFT) {
 		await this.drawNFT()
@@ -51,7 +48,7 @@ export default class NTF extends Vue {
 	}
 
 	get style() {
-		return `postion:relative; top:0; left:0; width:${this.size.width}px;height:${this.size.height}px;`
+		return `width:${this.size.width}px;height:${this.size.height}px;`
 	}
 
 	get canvsId() {
@@ -77,6 +74,22 @@ export default class NTF extends Vue {
 		for (let i = 0; i < 8; i++) {
 			await this.drawImage(ctx, i)
 		}
+		//remove boder
+		const borderwidth = 1
+		ctx.clearRect(0, 0, borderwidth, this.size.height)
+		ctx.clearRect(0, 0, this.size.width, borderwidth)
+		ctx.clearRect(
+			0,
+			this.size.height - borderwidth,
+			this.size.width,
+			borderwidth
+		)
+		ctx.clearRect(
+			this.size.width - borderwidth,
+			0,
+			borderwidth,
+			this.size.height
+		)
 		const card = document.getElementById(this.canvsId)!
 		card.appendChild(this.canvas)
 		this.loading = false
@@ -96,30 +109,6 @@ export default class NTF extends Vue {
 		ctx.drawImage(attributeImage, 0, 0, this.size.width, this.size.height)
 	}
 
-	async drawAttribute(
-		ctx: CanvasRenderingContext2D,
-		attributeTag: number,
-		yOffset: (imageHeight: number) => number
-	): Promise<Entity.ImageSize> {
-		const attribute = this.attributes(attributeTag)
-		const attributeImage = await this.getImage(
-			ctx,
-			`/${attributeTag}/${attribute}`
-		)
-		const attributeImageSize: Entity.ImageSize = {
-			width: attributeImage.width * this.wfactor,
-			height: attributeImage.height * this.hfactor,
-		}
-		ctx.drawImage(
-			attributeImage,
-			(this.size.width - attributeImageSize.width) / 2,
-			yOffset(attributeImageSize.height),
-			attributeImageSize.width,
-			attributeImageSize.height
-		)
-		return attributeImageSize
-	}
-
 	attributes(tag: number): number {
 		return this.token.metaId
 			.and(BigNumber.from('0x0F').shl(8 * tag))
@@ -132,7 +121,7 @@ export default class NTF extends Vue {
 		imageURI: string
 	): Promise<HTMLImageElement> {
 		const baseURL =
-			'https://mygateway.mypinata.cloud/ipfs/QmPrKVbQKQKhrg7CLgUkQwzzWRjrXvKbjTbnPJTVQW7Fnq'
+			'https://mygateway.mypinata.cloud/ipfs/QmdzAFKZFyw2WVPiYDo97E9kCzEnPRP6CdeCiuiLdiGJ2S'
 		const res = await axios.get(baseURL + imageURI)
 		const image = new Image()
 		image.src = res.data
